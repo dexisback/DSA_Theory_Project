@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>City Map - India</title><link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'/><style>html,body,#map{height:100%;margin:0;} .edge-label{background:transparent;border:none;font-weight:600;}</style></head><body><div id='map'></div><script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script><script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.polylinedecorator/1.7.0/leaflet.polylineDecorator.min.js'></script><script>
+var map = L.map('map').setView([22.5937, 78.9629], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+var nodes = [
+  {id:0, name:"Mumbai", lat:19.076000, lon:72.877700},
+  {id:1, name:"Delhi", lat:28.704100, lon:77.102500},
+  {id:2, name:"Kolkata", lat:22.572600, lon:88.363900}
+];
+var edges = [
+  {u:0, v:2, w:4000}
+  ,{u:0, v:1, w:1300}
+  ,{u:1, v:2, w:1200}
+];
+var sp = [0,1,2];
+nodes.forEach(n=>{
+  var m = L.marker([n.lat, n.lon]).addTo(map);
+  m.bindPopup('<b>'+n.name+'</b>');
+});
+function pt(id){ let n = nodes.find(x=>x.id===id); return [n.lat, n.lon]; }
+edges.forEach(e=>{
+  var line = L.polyline([pt(e.u), pt(e.v)], {weight:3, opacity:0.6}).addTo(map);
+  var a=pt(e.u), b=pt(e.v);
+  var mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+  L.marker(mid,{opacity:0}).addTo(map)
+    .bindTooltip(String(e.w),{permanent:true,direction:'center',className:'edge-label'});
+});
+if (sp.length>1){
+  var coords=[]; for (var i=0;i<sp.length;i++){ coords.push(pt(sp[i])); }
+  var spLine = L.polyline(coords, {color:'red', weight:6, opacity:0.9}).addTo(map);
+  spLine.bindPopup('Shortest Path');
+  try {
+    var decorator = L.polylineDecorator(spLine, {patterns: [
+      {offset: '5%', repeat: '15%', symbol: L.Symbol.arrowHead({pixelSize: 10, polygon: false, pathOptions: {stroke: true, color: 'red'}})}
+    ]}).addTo(map);
+  } catch(e) { console.warn('PolylineDecorator not available', e); }
+  map.fitBounds(coords, {padding:[40,40]});
+} else { // if no path, fit all nodes
+  var all=[]; nodes.forEach(n=>all.push([n.lat,n.lon]));
+  if (all.length>0) map.fitBounds(all, {padding:[40,40]});
+}
+</script></body></html>
