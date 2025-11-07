@@ -1,3 +1,33 @@
+# Compiled objects and temporary files
+*.o
+*.obj
+*.exe
+a.out
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Logs and temporary
+*.log
+*~
+
+# Python caches
+__pycache__/
+
+# Node modules
+node_modules/
+
+# Ignore saved runtime/demo data (we commit map and binary explicitly)
+city_data.txt
+
+# Core dumps
+core
 # Combined .gitignore for DSA_Theory_Project
 
 # Build and runtime
