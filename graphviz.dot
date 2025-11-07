@@ -1,10 +1,15 @@
 graph City {
   overlap=false;
   splines=true;
-  n0 [label="Mumbai\nR:30 G:20 Y:5"];
-  n1 [label="Delhi\nR:30 G:20 Y:5"];
-  n2 [label="Kolkata\nR:30 G:20 Y:5"];
-  n0 -- n2 [label="4000"];
-  n0 -- n1 [label="1300"];
-  n1 -- n2 [label="1200"];
+  n0 [label="Bilaspur\nR:30 G:20 Y:5"];
+  n1 [label="Lucknow\nR:30 G:20 Y:5"];
+  n2 [label="Raipur\nR:30 G:20 Y:5"];
+  n3 [label="Mumbai\nR:30 G:20 Y:5"];
+  n4 [label="Kolkata\nR:30 G:20 Y:5"];
+  n0 -- n1 [label="800"];
+  n0 -- n2 [label="250"];
+  n1 -- n2 [label="900"];
+  n1 -- n4 [label="900"];
+  n2 -- n3 [label="1200"];
+  n3 -- n4 [label="2000"];
 }
