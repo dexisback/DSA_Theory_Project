@@ -1,18 +1,25 @@
-# Prerequisites
-*.d
+# Combined .gitignore for DSA_Theory_Project
 
-# Object files
+# Build and runtime
 *.o
+*.log
+*.bak
+*~
+*.swp
+a.out
+first
+city_data.txt
+
+# Object & linker outputs
+*.d
 *.ko
 *.obj
 *.elf
-
-# Linker output
 *.ilk
 *.map
 *.exp
 
-# Precompiled Headers
+# Precompiled headers
 *.gch
 *.pch
 
@@ -22,13 +29,13 @@
 *.la
 *.lo
 
-# Shared objects (inc. Windows DLLs)
+# Shared objects
 *.dll
 *.so
 *.so.*
 *.dylib
 
-# Executables
+# Executables (keep 'main' in repo explicitly)
 *.exe
 *.out
 *.app
@@ -51,5 +58,23 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# debug information files
-*.dwo
+# Editor / IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python / venv
+venv/
+env/
+__pycache__/
+
+# Misc
+*.sqlite3
+*.db
+secret*.txt
+
+# Notes: map_india.html and main should be tracked in the repo (do NOT ignore them)

@@ -1,7 +1,9 @@
-/* smart_traffic_with_map.c
-   Adjacency-list + Dijkstra with Min-Heap + GraphViz DOT export
-   + Leaflet map of India (all roads grey, shortest path red)
-*/
+/*
+ * DSA Traffic Management Project
+ * - adjacency-list graph, Dijkstra (min-heap)
+ * - time-dependent waiting at traffic lights
+ * - exports GraphViz DOT and an interactive Leaflet map (map_india.html)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -116,8 +118,7 @@ void displayGraph(Graph *g) {
     }
 }
 
-// Save graph (edge list). NEW: write lat/lon per junction
-// Format:
+// Save graph (edge list). Format:
 // V
 // name R G Y lat lon   (V lines)
 // E
@@ -159,7 +160,8 @@ void saveGraphToFile(Graph *g, const char *filename) {
     printf("GraphViz DOT exported to graphviz.dot\n");
 }
 
-// Load graph. Tries new format (name R G Y lat lon), falls back to old (name R G Y).
+// Load graph from file. Supports new format (name R G Y lat lon) and
+// falls back to the older format (name R G Y) if lat/lon are absent.
 void loadGraphFromFile(Graph *g, const char *filename) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
@@ -173,7 +175,7 @@ void loadGraphFromFile(Graph *g, const char *filename) {
     if (fscanf(fp, "%d", &v) != 1) { fclose(fp); initGraph(g); return; }
     g->vertices = v;
 
-    // consume newline
+    // consume newline (file pointer is at start of junction lines)
     for (int i = 0; i < g->vertices; i++) {
         // try to read 6 tokens
         char name[20];
@@ -186,16 +188,10 @@ void loadGraphFromFile(Graph *g, const char *filename) {
             g->lights[i].red=R; g->lights[i].green=G; g->lights[i].yellow=Y;
             g->lat[i]=la; g->lon[i]=lo;
         } else {
-            // rewind partially and try 4 tokens
+            // fallback: try reading a line and parsing name R G Y
             clearerr(fp);
-            fseek(fp, 0, SEEK_CUR); // no-op portability
-            // fallback: name R G Y
-            // read the whole line first (in case of mixed spaces)
-            // safer approach: use fgets and sscanf
+            fseek(fp, 0, SEEK_CUR); // portability no-op
             char line[256];
-            // move file pointer back to start of this line: not trivial; simplest is to read the rest of line:
-            // Since failed fscanf likely left us mid-line, read the rest with fgets and then parse.
-            // We'll attempt fgets until we parse 4 tokens.
             int ok = 0;
             while (fgets(line, sizeof(line), fp)) {
                     if (sscanf(line, "%19s %d %d %d", name, &R, &G, &Y) == 4) {

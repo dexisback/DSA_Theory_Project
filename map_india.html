@@ -2,16 +2,21 @@
 var map = L.map('map').setView([22.5937, 78.9629], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
 var nodes = [
-  {id:0, name:"Mumbai", lat:19.076000, lon:72.877700},
-  {id:1, name:"Delhi", lat:28.704100, lon:77.102500},
-  {id:2, name:"Kolkata", lat:22.572600, lon:88.363900}
+  {id:0, name:"Bilaspur", lat:22.079600, lon:82.139100},
+  {id:1, name:"Lucknow", lat:26.846700, lon:80.946200},
+  {id:2, name:"Raipur", lat:21.251400, lon:81.629600},
+  {id:3, name:"Mumbai", lat:19.076000, lon:72.877700},
+  {id:4, name:"Kolkata", lat:22.572600, lon:88.363900}
 ];
 var edges = [
-  {u:0, v:2, w:4000}
-  ,{u:0, v:1, w:1300}
-  ,{u:1, v:2, w:1200}
+  {u:0, v:1, w:800}
+  ,{u:0, v:2, w:250}
+  ,{u:1, v:2, w:900}
+  ,{u:1, v:4, w:900}
+  ,{u:2, v:3, w:1200}
+  ,{u:3, v:4, w:2000}
 ];
-var sp = [0,1,2];
+var sp = [0,1,4];
 nodes.forEach(n=>{
   var m = L.marker([n.lat, n.lon]).addTo(map);
   m.bindPopup('<b>'+n.name+'</b>');
